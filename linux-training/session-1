@@ -1,0 +1,120 @@
+LINUX BASICS
+
+These are the main notes and practice tasks from class.
+
+1. LINUX ARCHITECTURE
+
+Linux has four main layers:
+
+1. Hardware - CPU, memory, disk, and network card
+2. Kernel - manages hardware, memory, files, and processes
+3. Shell - reads and runs commands, such as bash
+4. Applications - programs such as Chrome, VS Code, and MySQL
+
+When troubleshooting, first ask which layer has the problem.
+
+2. LINUX DISTRIBUTIONS
+
+A distribution is the Linux kernel packaged with software and tools.
+
+Common examples:
+
+Debian-based: Ubuntu, Debian, and Linux Mint. Uses apt.
+Red Hat-based: RHEL, Fedora, and Rocky Linux. Uses yum or dnf.
+Arch-based: Arch Linux and Manjaro. Uses pacman.
+SUSE-based: openSUSE and SLES. Uses zypper.
+
+3. LINUX FILE SYSTEM
+
+Linux starts at /, called the root directory. It does not use drive letters like C: or D:.
+
+Important folders:
+
+/home - personal files
+/etc - configuration files
+/var - logs and other changing data
+/tmp - temporary files
+/usr - programs and user files
+/root - the root user's home folder
+
+Remember:
+
+Linux is case-sensitive.
+File.txt and file.txt are different files.
+Hidden files start with a dot, such as .bashrc.
+
+4. BASIC COMMANDS
+
+pwd shows your current folder.
+
+Command:
+pwd
+
+ls -lrt lists files and sorts them by time.
+
+Command:
+ls -lrt
+
+cd changes folders.
+
+Commands:
+cd Documents
+cd ..
+cd
+
+mkdir creates a folder.
+
+Command:
+mkdir practice
+
+touch creates an empty file.
+
+Command:
+touch notes.txt
+
+In ls -lrt:
+
+l means long format.
+r means reverse order.
+t means sort by time.
+
+PRACTICE
+
+1. Run pwd and note the result.
+2. Run ls -lrt and identify the newest item.
+3. Create and enter a practice folder.
+
+	mkdir linux-practice
+	cd linux-practice
+	pwd
+
+4. Create three files.
+
+	touch file1.txt
+	touch file2.txt
+	touch file3.txt
+
+5. Run ls -lrt. Which file is last, and why?
+6. Create a backup folder, enter it, and go back.
+
+	mkdir backup
+	cd backup
+	cd ..
+
+7. Return home by running cd with no arguments.
+8. Run ls -lrt. Can you see the linux-practice folder?
+
+BONUS
+
+Run these commands:
+
+	touch file1.txt
+	ls -lrt
+
+Where does file1.txt appear now? It moved because its timestamp was updated.
+
+QUICK RECAP
+
+Architecture: Hardware -> Kernel -> Shell -> Applications
+File system: One tree starting at /
+Main commands: pwd, ls, cd, mkdir, and touch
