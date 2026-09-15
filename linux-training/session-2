@@ -1,0 +1,177 @@
+LINUX BASICS - SESSION 2
+
+FILE AND DIRECTORY MANAGEMENT
+
+The symbol / is the root of the Linux file system.
+
+pwd
+Shows the current working directory.
+
+whoami
+Shows the name of the current user.
+
+uname -a
+Shows information about the Linux system.
+
+mkdir foldername
+Creates a new directory.
+
+rmdir foldername
+Removes an empty directory.
+
+rm -r foldername
+Removes a directory and its contents.
+Use this command carefully.
+
+CREATING AND MANAGING FILES
+
+touch filename
+Creates a new empty file.
+
+rm filename
+Removes a file.
+
+cp source destination
+Copies a file.
+
+Example:
+cp demo.txt demo-copy.txt
+
+mv oldname newname
+Renames a file or moves it to another directory.
+
+Example:
+mv old.txt new.txt
+
+FILE VIEWING COMMANDS
+
+cat filename
+Displays the complete contents of a file.
+
+less filename
+Opens a file for scrolling.
+
+Inside less:
+Space - move down one page
+b - move up one page
+q - quit
+
+Install vim and less on Debian or Ubuntu:
+
+sudo apt install vim less
+
+VI AND VIM
+
+vi is a text editor. Vim is an improved version of vi.
+
+Open a file with vim:
+
+vim filename
+
+Vim has three important modes:
+
+Normal mode
+Used for moving around the file and running shortcuts.
+Press Escape to return to normal mode.
+
+Insert mode
+Used for typing text.
+Press i, a, o, or one of the other insert commands.
+
+Command mode
+Used for saving, quitting, searching, and going to a line.
+Press : from normal mode.
+
+IMPORTANT VI SHORTCUTS
+
+Moving around in normal mode:
+
+h - move left
+j - move down
+k - move up
+l - move right
+0 - move to the beginning of the line
+$ - move to the end of the line
+gg - go to the first line
+G - go to the last line
+:number - go to a specific line
+
+Examples:
+:1       go to line 1
+:500     go to line 500
+
+Starting to type:
+
+i - insert before the cursor
+a - insert after the cursor
+I - insert at the beginning of the line
+A - insert at the end of the line
+o - open a new line below the current line
+O - open a new line above the current line
+
+Deleting and changing text:
+
+x - delete the character under the cursor
+dd - delete the current line
+dw - delete the word under the cursor
+D - delete from the cursor to the end of the line
+u - undo the last change
+Ctrl+r - redo a change
+
+Copying and pasting:
+
+yy - copy the current line
+nyy - copy n lines, for example 3yy
+p - paste after the cursor
+P - paste before the cursor
+
+Searching:
+
+/word - search forward for a word
+?word - search backward for a word
+n - go to the next match
+N - go to the previous match
+
+Saving and quitting:
+
+:w - save the file
+:q - quit vi
+:wq - save and quit
+:q! - quit without saving
+ZZ - save and quit from normal mode
+
+Example editing sequence:
+
+1. Open a file:
+	vim demo.txt
+2. Press i and type your changes.
+3. Press Escape to return to normal mode.
+4. Type :wq and press Enter to save and quit.
+
+VIEWING THE START AND END OF FILES
+
+head -20 demo.txt
+Displays the first 20 lines of a file.
+
+tail -20 demo.txt
+Displays the last 20 lines of a file.
+
+tail -f demo.txt
+Continuously displays new lines added to a file. This is useful for watching log files.
+Press Ctrl+c to stop it.
+
+USING ECHO WITH FILES
+
+echo "hello" > demo.txt
+Writes hello to the file and replaces the old contents.
+
+echo "hello" >> demo.txt
+Adds hello to the end of the file without deleting the old contents.
+
+QUICK RECAP
+
+File commands: mkdir, rmdir, rm, touch, cp, and mv
+Viewing commands: cat, less, head, and tail
+Vim modes: normal mode, insert mode, and command mode
+Save and quit: :wq
+Quit without saving: :q!
