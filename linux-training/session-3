@@ -1,0 +1,214 @@
+LINUX BASICS - SESSION 3
+
+USER AND GROUP MANAGEMENT
+
+User management is important for accountability and security. Each person should use a separate account instead of sharing the root account.
+
+The root user is the system administrator. Root can read, change, or delete almost anything, so use it carefully.
+
+1. IMPORTANT SYSTEM FILES
+
+/etc contains system configuration files.
+
+/etc/passwd contains basic information about local users, such as the username, user ID, group ID, home directory, and login shell.
+
+/etc/shadow stores password hashes and password-aging information. It should only be readable by privileged users.
+
+/etc/group contains local group information.
+
+View these files with:
+
+cat /etc/passwd
+cat /etc/group
+
+Do not edit these files manually during normal administration. Use commands such as useradd, usermod, groupadd, and passwd.
+
+2. CREATING USERS
+
+useradd devops
+Creates a user account. On some distributions, this command does not create the home directory unless an option is supplied.
+
+Create a user and its home directory:
+
+sudo useradd -m devops
+
+Set or change the user's password:
+
+sudo passwd devops
+
+The password is not displayed while it is being typed.
+
+On Debian and Ubuntu, adduser is an interactive command that creates the account, home directory, and user information:
+
+sudo adduser devops
+
+useradd is commonly used in scripts because it is non-interactive. adduser is convenient for creating users manually, but it asks questions during the process.
+
+Check the account:
+
+id devops
+getent passwd devops
+
+3. PASSWORDS AND PASSWORD AGING
+
+Linux stores a one-way password hash, not the original password. A normal user cannot decrypt the hash to recover a forgotten password.
+
+If an administrator has appropriate privileges, they can reset the password without recovering the old one:
+
+sudo passwd devops
+
+Require the user to choose a new password at the next login:
+
+sudo chage -d 0 devops
+
+Set the maximum password age to 90 days:
+
+sudo chage -M 90 devops
+
+View password-aging information:
+
+sudo chage -l devops
+
+Password policies should follow the organization's security requirements. A password expiration period by itself is not a complete security policy.
+
+4. LOCKING AND UNLOCKING ACCOUNTS
+
+Lock an account without deleting it:
+
+sudo passwd -l devops
+
+Unlock the account:
+
+sudo passwd -u devops
+
+Locking is useful when access must be suspended temporarily or while an account is being investigated. Confirm the organization's policy before unlocking an account.
+
+5. DELETING USERS
+
+When an employee leaves an organization, first confirm ownership of files, running processes, scheduled jobs, and service accounts. Then disable or remove access according to the organization's offboarding process.
+
+Delete the user but keep the home directory:
+
+sudo userdel devops
+
+Delete the user and its home directory:
+
+sudo userdel -r devops
+
+The -r option is destructive. Back up or transfer any required files before using it.
+
+Confirm that the account is gone:
+
+getent passwd devops
+
+No output normally means that the account was not found.
+
+6. CREATING AND USING GROUPS
+
+Groups make permission management easier. Instead of changing permissions for 250 developers individually, place them in a group and assign permissions to that group.
+
+Create a group:
+
+sudo groupadd devops_training
+
+Add an existing user to the group:
+
+sudo usermod -aG devops_training devops
+
+The -a option appends the group. Without -a, the user's existing supplementary groups may be replaced.
+
+Check the user's groups:
+
+id devops
+groups devops
+
+Check the group entry:
+
+getent group devops_training
+
+The user may need to log out and log in again before a new group membership appears in the session. A user can also start a new login shell with:
+
+su - devops
+
+Only use su when you have permission to access the target account. The command may ask for the target user's password.
+
+7. FILE PERMISSIONS AND GROUPS
+
+When a directory or file is owned by a group, permissions assigned to that group apply to all users in the group.
+
+View ownership and permissions:
+
+ls -ld /path/to/directory
+
+Example group ownership and permissions:
+
+sudo chgrp devops_training /shared/project
+sudo chmod 2770 /shared/project
+
+The 2 in 2770 enables the setgid bit on the directory, so new files normally inherit the directory's group. Test permission changes in a safe practice directory before applying them to a production system.
+
+8. ROOT AND DANGEROUS COMMANDS
+
+sudo su -
+Starts a root login shell when the current user is allowed to use sudo. Use sudo for individual commands when possible, because a root shell makes accidental damage easier.
+
+Never run this as a practice exercise:
+
+rm -rf /sbin
+
+/sbin contains essential system programs on many Linux systems. Removing it can make the system unusable. In modern distributions, /sbin may also be a symbolic link into /usr/sbin. Always inspect a path carefully before using rm -r or rm -rf.
+
+9. CONNECTING TO A REMOTE LINUX SERVER WITH SSH
+
+An SSH server usually runs the sshd service on the remote Linux machine. An SSH client runs on your laptop or workstation. Git Bash on Windows can provide the ssh client.
+
+Connect with:
+
+ssh username@public-ip-address
+
+The first connection may ask you to verify the server's host key. Verify it through a trusted source before accepting it. Then enter the account password or use the configured SSH key.
+
+After connecting, identify the system:
+
+whoami
+uname -a
+pwd
+
+PRACTICE
+
+1. Create a test user with a home directory.
+
+	sudo useradd -m trainee
+	sudo passwd trainee
+	id trainee
+
+2. Create a group and add the test user.
+
+	sudo groupadd training
+	sudo usermod -aG training trainee
+	id trainee
+
+3. Require a password change at the next login and inspect the policy.
+
+	sudo chage -d 0 trainee
+	sudo chage -l trainee
+
+4. Lock and unlock the test account.
+
+	sudo passwd -l trainee
+	sudo passwd -u trainee
+
+5. Remove the test user and its home directory after confirming that it is only a practice account.
+
+	sudo userdel -r trainee
+
+QUICK RECAP
+
+Users provide identity and accountability.
+Passwords are stored as one-way hashes; forgotten passwords are reset, not decrypted.
+Use chage for password-aging policies.
+Lock accounts with passwd -l and unlock them with passwd -u.
+Groups allow permissions to be managed for many users at once.
+Use useradd in scripts and adduser for interactive account creation on Debian-based systems.
+Use root and rm -rf with extreme care.
+Use SSH to connect securely to a remote Linux server.
