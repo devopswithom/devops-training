@@ -1,0 +1,197 @@
+Git Fundamentals 
+
+What we covered in this session
+
+We covered how Git stores data internally, the three types of version control systems, why Git uses a distributed model, the three stages a file moves through in Git (working, staged, committed), the basic Git workflow, different ways to use Git, how to configure Git at different levels, and finally how Git stores everything using hashes.
+
+Part 1 - What is Version Control
+
+A Version Control System, or VCS, records the changes made to a file over time. This means you can always go back and get the data from an earlier point in time.
+
+Git does not just track source code like Java or Python files, it also tracks images and other types of files as well.
+
+There are three kinds of version control systems:
+1. Local
+2. Centralised
+3. Distributed
+
+Part 2 - Local Version Control System
+
+This method works by taking a backup before making changes to a file or directory. It keeps a timestamp of the data, and is very simple to maintain.
+
+Whenever you want a previous version, you go to that particular date and use the backup from that date.
+
+Disadvantage:
+If you have lots and lots of files, it becomes very difficult to find the correct previous version with ease.
+
+Part 3 - Centralised Version Control System
+
+Here, there is a single central server where all the files and folders are stored. The client takes the latest files from this server. This system was introduced to help developers collaborate with each other.
+
+Since everyone is connected to a single central server, everyone can see what is going on in the project and everyone gets the latest project updates.
+
+Disadvantages:
+If the central server goes down, no one can get updates and no one can push their changes, this causes a collaboration problem.
+If the server's hard disk gets corrupted and there is no proper backup, everything can be lost completely, same risk as the local VCS.
+
+Part 4 - Distributed Version Control System
+
+To overcome the issues of centralised systems, distributed version control was introduced.
+
+In a distributed system, the client does not just check out a snapshot of the files, it also fully mirrors the entire repository, including its complete history.
+
+This means every clone is a full backup of all the data. So even if the central server goes down, you can restore everything back to the server from any client's local copy.
+
+Key difference between centralised and distributed:
+In centralised VCS, only the latest version snapshot is available to the client.
+In distributed VCS, the full history is mirrored on every client machine.
+
+Since the full history is available locally, if you want to make changes or check the difference between files, you can do it locally without needing to contact the remote server at all.
+
+Part 5 - The Three Stages in Git
+
+Every file in Git moves through three stages:
+
+1. Working stage, also called modified stage
+This is the present snapshot of your files, as they currently exist on your system.
+
+2. Staged stage
+This is where you mark a file to say it should go into the next commit snapshot. The technical name for this area is the index.
+
+3. Commit stage
+Once committed, the data is safely stored in your local database. This is stored inside the .git directory on your local machine. This is also the area that gets copied when you interact with the remote server.
+
+Flow: working directory, then staging area, then repository (local database).
+
+Example: if you have modified 10 files but only staged 5 of them, only those 5 staged files will be included when you make a commit. The remaining 5 stay as uncommitted changes.
+
+Part 6 - Basic Git Workflow
+
+The Git workflow happens in this order:
+
+1. Modify the files
+2. Selectively stage the changes you want to include in the next commit
+3. Commit, this permanently stores the staged files in the Git directory
+
+Part 7 - Ways of Using Git
+
+There are two common ways to use Git:
+1. CLI, Command Line Interface
+2. GUI, Graphical User Interface
+
+Most developers prefer using the CLI.
+
+To check if Git is installed and see its version:
+git --version
+
+Part 8 - Setting Up Git
+
+After installing Git, you should set your username and email address. Git uses this information to record who made changes to a file, this is used as a reference in every commit.
+
+Part 9 - Git Configuration Levels
+
+Git supports configuration at multiple levels:
+
+1. Repository level, also called local level
+Location: repository/.git/config
+This applies only to that specific project.
+
+2. User level, also called global level
+Location: users/yourname/.gitconfig
+
+3. System level
+Location: user/local/etc/gitconfig
+This applies to the entire Git installation on the machine.
+
+To check the complete Git configuration along with where each setting came from:
+git config --list --show-origin
+This shows both user level and system level configuration.
+
+Part 10 - Common Configuration Commands
+
+To change configuration at the project or local level, first initialize a Git repository:
+git init
+This creates a .git folder, inside which you will find the config file.
+
+To check the currently configured user email:
+git config user.email
+
+To change the email address at the local level:
+git config --local user.email youremail@example.com
+
+To check the user email again:
+git config user.email
+
+To set the username:
+git config user.name "your name"
+
+To remove a specific local setting and fall back to the old value:
+git config --unset user.email
+
+To remove a specific setting at the global level:
+git config --global --unset user.name
+
+To remove an entire config section at the global level:
+git config --global --remove-section user
+
+To remove the entire user section at the local level:
+git config --local --remove-section user
+
+For most day to day work, we use project level, meaning local level configuration.
+
+Part 11 - Getting Help in Git
+
+To see the commonly used Git commands for various situations:
+git help
+
+To see all the commands available in Git:
+git help -a
+
+To get detailed help about a specific command, example init:
+git help init
+
+Part 12 - Starting a New Project
+
+To check the current branch or list branches:
+git branch
+
+Part 13 - How Git Stores Data Internally
+
+Git stores its data as key and value pairs.
+
+The value is the actual content of the file.
+
+When you give Git the content, it calculates a unique key for that content, this key is called a hash.
+
+The hash is generated using the SHA1 algorithm.
+SHA1 produces a 20 byte value shown in hexadecimal format.
+
+Every single object in Git has its own unique SHA1 hash. Everything in Git is stored and referenced using this hash key.
+
+To view the commit history:
+git log
+
+To decode and view the content stored against a specific key or hash:
+git cat-file <key> -p
+
+Part 14 - Commit Best Practices
+
+Make commits for specific, focused purposes, example: fixing a particular bug, fixing an accidental typo in a file.
+
+Build the habit of writing good, clear commit messages. This helps others understand exactly what changes were made and why, just by reading the commit message.
+
+Note: You can also skip the staging area when committing, this is usually done when your code does not need a review of the changes before committing.
+
+Quick Practice Checklist
+
+1. git --version, confirm Git is installed
+2. git init, initialize a new repository and create the .git folder
+3. git config --local user.email youremail@example.com, set local email
+4. git config user.name "your name", set local username
+5. git config --list --show-origin, view all configs and where they come from
+6. git config --unset user.email, remove a local setting
+7. git help and git help -a, explore available commands
+8. git help init, get help on a specific command
+9. git branch, check the current branch
+10. Make a small change, then git log, view commit history
+11. git cat-file <key> -p, decode and view a stored object by its hash

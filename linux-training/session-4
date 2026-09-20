@@ -1,0 +1,136 @@
+Linux Process & Service Management — Simple Notes
+
+1. What is a Process?
+
+Every time you run a program (nginx, java, python, etc.), Linux starts a process for it. Each process gets a unique number called a PID (Process ID).
+
+2. Viewing / Checking Processes
+
+ps -ef
+Lists all running processes.
+
+ps aux
+Lists all running processes (different format, very common).
+
+ps aux | grep java
+Filters the list to show only lines containing "java".
+
+ps aux | grep java | grep -v grep
+Same as above, but removes the grep command itself from the results, so you only see the real process, not your search command.
+
+Why the extra grep -v grep?
+When you run ps aux | grep java, the search command itself shows up as a line in the output, because it also contains the word "java". Adding grep -v grep hides that fake match, so if nothing real is running, you get zero results.
+
+3. Killing a Process
+
+Why kill a process?
+Sometimes an application, like a Java app, hangs or freezes and uses too much CPU or memory, starving other processes. You may get a Jira ticket asking you to find and kill such a process, or you may need to do it during planned downtime.
+
+How to do it:
+First, view or check the process to find its PID using ps -ef or ps aux.
+Then kill it using the PID.
+
+kill (PID)
+Normal, graceful kill request. Example: kill 4055
+
+kill -9 (PID)
+Force kill. Example: kill -9 4040. This is the classic interview question: how do you forcefully kill a process?
+
+kill -3 (PID)
+Doesn't kill the process, it dumps the thread logs. Useful when a developer says the app is using too much memory and asks you to share the thread dump or logs.
+
+kill -STOP (PID)
+Pauses the process temporarily, doesn't kill it.
+
+kill -CONT (PID)
+Resumes a paused process.
+
+4. Services (Background Processes)
+
+A service is a background process that starts automatically when the server boots up, and restarts automatically if the server restarts.
+
+Simple analogy: when your laptop restarts, an app you had set to auto-start comes back up on its own. That's exactly how a service behaves.
+
+Process vs service, which is which?
+Something like a Python or Java app you start manually is a process.
+A web server, like Apache or Nginx, is usually set up as a service, so if the Linux server goes down and comes back up, the web server automatically comes back online too.
+
+You can convert a process into a service, but common tools like Apache and Nginx already come with this built in.
+
+Managing services:
+
+systemctl list-units --type=service
+Lists all services running on the machine.
+
+systemctl stop cron.service
+Stops a specific service, example given is cron.
+
+systemctl start (service)
+Starts a service.
+
+systemctl restart (service)
+Restarts a service.
+
+5. Monitoring CPU, Memory and Disk
+
+Common questions devops engineers get asked:
+Which process is using the most memory?
+Which process is using the most CPU?
+Which process is using the most disk?
+
+ps aux lists everything, but checking each line manually is painful. Better tools below.
+
+top
+Real-time, live view of processes, shows PID, CPU percent, memory percent, updates every second. Highest resource-consuming processes appear at the top.
+
+htop
+Same info as top, but with a nicer, more visual interface.
+
+vmstat
+Reports overall system performance. Useful when debugging an instance to see if it's under memory pressure.
+
+free -m
+Shows memory used and free, static snapshot, in MB.
+
+free -h
+Same as above, but in human-readable units like GB or MB.
+
+nproc
+Shows how many CPUs the machine has.
+
+df -h
+Shows disk space usage per partition, human-readable.
+
+Note: top and htop are visual tools, great for a human watching the screen, but not usable inside automation scripts. For scripts, use free -m, ps aux, etc, which give plain text output you can filter with grep.
+
+In real-world setups, these commands are often complemented by monitoring tools like Prometheus and Grafana for dashboards and alerts.
+
+6. Disk Management Key Commands
+
+df -h
+Tells you if the whole machine is running out of disk space. Shows all partitions, the / filesystem is the important one.
+
+du -sh folder/
+Tells you what inside one specific folder is taking up space.
+
+ps aux
+A snapshot of what's currently running.
+
+top
+A live, refreshing view of what's running.
+
+percent CPU inside top
+How hard each individual process is working the processor.
+
+Quick Practice Checklist
+
+Try these in order on a test Linux machine:
+
+1. ps aux, see everything running
+2. ps aux | grep (name), search for a specific app
+3. ps aux | grep (name) | grep -v grep, clean search, removes the grep noise
+4. top, watch live CPU and memory usage
+5. kill (PID) then kill -9 (PID), practice graceful vs forced kill
+6. kill -STOP (PID) then kill -CONT (PID), practice pause and resume
+7. systemctl list-units --type=service, see running services
+8. free -h and df -h, check memory and disk space
