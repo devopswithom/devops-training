@@ -1,5 +1,6 @@
 Git Notes
 git add · git commit · git diff · git diff --staged · git mv · git restore · git merge
+
 1. The Big Picture — Git's Three Areas
 Every command below moves a file between three areas, or lets you compare them.
   WORKING DIR  --git add-->  STAGING AREA  --git commit-->  REPOSITORY
@@ -7,39 +8,48 @@ Every command below moves a file between three areas, or lets you compare them.
 
        <----------- git restore -----------|
                      <---- git restore --staged ----|
+
+
 2. git add   [Working -> Staging]
 Moves changes from the working directory into the staging area, marking them 'ready to commit.'
 git add filename.txt      # stage one file
 git add .                 # stage everything in current folder
 git add -A                # stage all changes in repo
 Practice:  Edit a file, run 'git status' (shows red/untracked), then 'git add' it and run 'git status' again (shows green/staged).
+
 3. git commit   [Staging -> Repository]
 Saves the staged snapshot permanently into the project's history with a message.
 git commit -m "Add login page"
 git commit -am "Fix typo"   # add + commit tracked files in one step
   (commit 1) ---> (commit 2) ---> (commit 3 - HEAD)
 Practice:  Stage 2-3 files separately, commit them, then run 'git log --oneline' to see the history chain.
+
 4. git diff   [Working vs Staging]
 Shows line-by-line changes that are NOT yet staged — i.e. working directory vs staging area.
 git diff              # unstaged changes
+
 git diff filename.txt # for one file
   WORKING DIR  <== git diff shows THIS gap ==>  STAGING AREA  ---->  REPOSITORY
 Practice:  Edit a tracked file (don't stage it) then run 'git diff' — observe red (-) old lines and green (+) new lines.
+
 5. git diff --staged   [Staging vs Repository]
 Shows what will actually go into the next commit — staging area vs last commit. (git diff --cached is the same thing, older name.)
 git diff --staged
 git diff --cached     # same thing, older name
   WORKING DIR  ---->  STAGING AREA  <== git diff --staged shows THIS gap ==>  REPO / HEAD
+
 Command	Compares
 git diff	Working Directory <-> Staging Area
 git diff --staged	Staging Area <-> Last Commit
 Practice:  Stage a change, then run both 'git diff' (empty!) and 'git diff --staged' (shows the change) to feel the difference.
+
 6. git mv   [Rename / Move]
 Renames or moves a file and stages that change in one step (equivalent to a manual rename plus 'git add' on both the old and new name).
 git mv old_name.txt new_name.txt
 git mv file.txt folder/file.txt
   old_name.txt   --git mv-->   new_name.txt   (already staged)
 Practice:  Rename a file using 'git mv', then run 'git status' — it should show as 'renamed', already staged.
+
 7. git restore   [Undo Changes]
 Restores files — discards working directory edits, or unstages a file.
 git restore filename.txt            # discard unstaged edits (working dir)
@@ -47,6 +57,7 @@ git restore --staged filename.txt   # unstage (move staged -> working dir, keep 
   REPOSITORY   --git restore file (reverts to last commit)-->  WORKING DIR
   STAGING AREA --git restore --staged file----------------->  WORKING DIR
 Practice:  Stage a change, then 'git restore --staged' it (still edited, just unstaged). Then 'git restore' it (edit fully discarded).
+
 8. git merge   [Combine Branches]
 Combines the history of another branch into your current branch.
 git checkout main
@@ -55,6 +66,7 @@ git merge feature-branch
                 \                          /
   feature:        F1 --- F2 ---------------
 Practice:  Create a branch, add a commit on it, switch back to main, add another commit, then merge the branch in and observe the merge commit.
+
 9. Quick Recap Table
 Command	Purpose
 git add	Working -> Staging
