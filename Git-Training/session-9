@@ -1,0 +1,140 @@
+Git Merge
+===============
+Merging always happens bases on the time stamps of the commits
+
+1 Create few commits on master
+  touch f1
+  git add .
+  git commit -m "a"
+  touch f2
+  git add .
+  git commit -m "b"
+
+2 Check the git commit history
+  git log --oneline
+
+3 Create a test branch and create few commits on it
+  git checkout -b test
+  touch f3
+  git add .
+  git commit -m "c"
+  touch f4
+  git add .
+  git commit -m "d"
+
+4 Check the commit history
+  git log --oneline
+
+5 Go back to master and create few more commits
+  git checkout master
+  touch f5
+  git add .
+  git commit -m "e"
+  touch f6
+  git add .
+  git commit -m "f"
+
+6 Check the commit history
+  git log --oneline
+
+9 Merge test with master
+  git merge test
+
+10 Check the commit history
+   git log --oneline
+
+Git rebase
+===================
+This is called as fastforward merge where the commits coming from a 
+branch are projected as the top most commits on master branch
+
+1 Implement step1-6 from above scenario
+
+2 To rebase test with master
+  git checkout test
+  git rebase master
+  git checkout master
+  git merge test
+
+3 Check the commit history
+  git log --oneline
+
+
+
+Git Cherrypicking
+=========================
+This is used to selectivey pick up certain commits and add them to the 
+master branch
+
+1 On master create few commits
+  a--->b
+
+2 Create a test branch and create few commits
+  git checkout -b test
+  a--->b--->c--->d--->e--->f--->g
+
+3 To bring only c and e commits to master
+  git checkout master
+  git cherry-pick c_commitid e_commitid
+
+
+
+
+Git reset 
+==============
+This is a command of git using which we can toggle between multiple
+versions of git and access whichever version we want
+
+Reset can be done in 3 ways
+1 Hard reset
+2 soft reset  (we can move one step back)
+3 Mixed reset (we can move two step back)
+
+In hard reset HEAD simply points to an older commit adn we can see the 
+data as present at the time of that older commit
+
+1 Create few commits on master
+  a-->b--->c
+
+2 To jump to b commit from c
+  git reset --hard b_commit_id (we can toggle between anyof the version)
+
+------------------------------------------------------------------
+Soft reset will also move the head to an older commit but
+we will see the condition of the git repository as just one
+step prior to the c commit ie the files will be seen in the
+stagging area
+
+git reset --soft b_commitid
+
+--------------------------------------------------------------------
+Mixed reset also moves the head to an older commit
+but we will see the condition of git as 2 steps prior to the c commit
+ie the files will be present in the untracked/modified section
+
+git reset --mixed b_commitid
+
+===========================================================================
+Git stashing
+======================
+Stash is a section of git into which once the files are pushed 
+git cannot access them
+
+To stash all the files present in the stagging area
+git stash 
+
+To stash all files present in stagging area and untracked section
+git stash -u
+
+To stash all files present in stagging area,untracked section and .gitignore
+git stash -a
+
+To see the list of stases
+git stash list
+
+To unstash a latest stash
+git stash pop
+
+To unstash an older stash
+git stash pop stash@{stashno}
+
